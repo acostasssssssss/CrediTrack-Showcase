@@ -2,7 +2,7 @@
 
 <div align="center">
   <img src="assets/mockups/inicio.png" width="65%" alt="Dashboard Web" />
-  <img src="assets/mockups/off-line.png" width="30%" alt="App Móvil Offline" />
+  <img src="assets/mockups/off-line.jpg" width="30%" alt="App Móvil Offline" />
 </div>
 
 <br />
@@ -28,7 +28,7 @@ El panel de administración para propietarios y auditores fue concebido bajo una
 
 <div align="center">
   <img src="assets/mockups/clientes.png" width="49%" alt="Lista de Clientes" />
-  <img src="assets/mockups/cobros de hoy.png" width="49%" alt="Cobros de Hoy" />
+  <img src="assets/mockups/cobros_de _hoy.png" width="49%" alt="Cobros de Hoy" />
 </div>
 
 ### Cartulina Pública (B2B2C)
@@ -63,15 +63,15 @@ La aplicación implementa microinteracciones fluidas a 60 FPS, navegación hápt
 La app persiste cada abono y gasto localmente mediante **Drift / SQLite**, calculando los balances en el dispositivo en microsegundos. Al reestablecer conectividad celular o Wi-Fi, el motor de sincronización procesa las colas pendientes contra el servidor central sin interrupciones ni pérdida de datos.
 
 <div align="center">
-  <img src="assets/mockups/off-line.png" width="35%" alt="Modo Offline" />
+  <img src="assets/mockups/off-line.jpg" width="35%" alt="Modo Offline" />
 </div>
 
 ### Seguridad, Accesos y Cifrado
 Persistencia de sesiones de alta seguridad mediante tokens cifrados en hardware con **Flutter Secure Storage** (Keystore en Android / Keychain en iOS). La interfaz proporciona módulos dedicados para autenticación biométrica, reseteo de claves con tokens de un solo uso y políticas de revocación remota de dispositivos.
 
 <div align="center">
-  <img src="assets/mockups/contraseñ.png" width="35%" alt="Seguridad" />
-  <img src="assets/mockups/conf.png" width="35%" alt="Configuración App" />
+  <img src="assets/mockups/contraseñ.jpg" width="35%" alt="Seguridad" />
+  <img src="assets/mockups/conf.jpg" width="35%" alt="Configuración App" />
 </div>
 
 ---
@@ -86,7 +86,7 @@ Persistencia de sesiones de alta seguridad mediante tokens cifrados en hardware 
 
 <div align="center">
 
-![Diagrama de Arquitectura](assets/architecture/diagrama_arquitectura.png)
+![Diagrama de Arquitectura](assets/architecture/diagrama_arquitectura.md)
 
 </div>
 
