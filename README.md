@@ -95,88 +95,73 @@ Persistencia de sesiones de alta seguridad mediante tokens cifrados en hardware 
 
 ## 🛠️ 3. Arquitectura Asíncrona y Stack Tecnológico
 
-El ecosistema CrediTrack está diseñado como una plataforma de alto rendimiento basada en arquitectura **100% Asíncrona (Event-Driven e I/O No Bloqueante)**, desacoplando tareas pesadas de los ciclos de renderizado tanto en la nube como en dispositivos cliente:
+* **Frontend Web:** React 19, Vite, Tailwind CSS, Lucide Icons, Framer Motion.
+* **Aplicación Móvil:** Flutter (Clean Architecture), Riverpod (State Management), Drift / SQLite (Base de datos local), Flutter Secure Storage.
+* **Backend & Servicios:** Python (FastAPI / SQLAlchemy), Pydantic, Uvicorn, Docker & Docker Compose.
+* **Bases de Datos & Almacenamiento:** PostgreSQL en la nube (instancia SaaS centralizada) y SQLite embebido en dispositivos cliente.
 
-* **Backend No Bloqueante:** Construido sobre **Python (FastAPI)** aprovechando el loop nativo `async`/`await` de `uvloop` y el driver asíncrono de alto desempeño **Asyncpg** para PostgreSQL. Esto permite gestionar miles de conexiones y peticiones concurrentes de sincronización sin incurrir en bloqueos por I/O ni saturación de hilos del servidor.
-* **Mobile Fluido (Dart Isolates):** La aplicación móvil delega el procesamiento intensivo de lectura/escritura en **Drift / SQLite** y la resolución de lotes de sincronización a subprocesos o hilos secundarios en segundo plano (**Dart Isolates**). Con esta separación de carga, el hilo principal de renderizado (*UI Thread*) se mantiene libre, garantizando una experiencia visual a **60 FPS sostenidos sin jank**.
-* **🔥 Feature Destacada: Aprovisionamiento Asíncrono (Magic Links):**
-  Para preservar la seguridad operativa y eliminar fricciones, los administradores no configuran contraseñas manuales ni credenciales compartidas para sus cobradores. El sistema despacha una solicitud asíncrona que genera un token criptográfico de un solo uso con firma temporal de expiración y construye un enlace seguro (*Magic Link*). Al acceder, el trabajador define sus credenciales y el backend orquesta el aprovisionamiento de la cuenta, roles y asignación de rutas en segundo plano a través de colas de tareas eficientes.
+### 🔥 Topología de Alto Rendimiento (Event-Driven)
+El ecosistema está diseñado para manejar alta concurrencia sin bloqueos (Non-blocking I/O) en ninguna de sus capas:
+* **Backend Asíncrono:** El servidor principal en FastAPI delega las tareas pesadas a *Workers* en segundo plano. Por ejemplo, el aprovisionamiento de nuevos cobradores mediante **Magic Links** (enlaces tokenizados de un solo uso) se procesa en colas asíncronas, respondiendo a la petición web en milisegundos.
+* **Base de Datos No Bloqueante:** Implementación de un pool de conexiones concurrentes mediante `Asyncpg`.
+* **Mobile Fluido a 60 FPS:** En la aplicación móvil, las operaciones de lectoescritura contra SQLite y la sincronización HTTP se ejecutan en *Dart Isolates* (hilos secundarios), garantizando que el *UI Thread* y las animaciones jamás sufran caídas de frames (*jank*).
 
-### Diagrama de Topología Asíncrona y Aprovisionamiento
+<div align="center">
 
 ```mermaid
 flowchart TD
-    %% ─────────────────────────────────────────────────────────────
-    %% CAPA CLIENTE: WEB ADMIN & MOBILE
-    %% ─────────────────────────────────────────────────────────────
-    subgraph Frontend["Capa Cliente (Frontend & Mobile)"]
-        direction TB
+    %% Estilos Profesionales (Cyber/Tech Aesthetic)
+    classDef frontend fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff
+    classDef mobile fill:#0f172a,stroke:#34d399,stroke-width:2px,color:#fff
+    classDef gateway fill:#1e1e1e,stroke:#f59e0b,stroke-width:2px,color:#fff
+    classDef api fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#fff
+    classDef worker fill:#312e81,stroke:#a78bfa,stroke-width:2px,color:#fff
+    classDef db fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff
+    classDef localdb fill:#451a03,stroke:#fb923c,stroke-width:2px,color:#fff
 
-        subgraph WebAdmin["Panel Administrador Web"]
-            AdminUI["Web Admin Dashboard<br/><b>React 19 + Tailwind CSS</b>"]
-            ActionTrigger["Evento Asíncrono:<br/><b>Generar Link de Invitación</b>"]
-            AdminUI --> ActionTrigger
+    %% 1. CAPA DE PRESENTACIÓN
+    subgraph CapaCliente ["Capa de Presentación (Clientes)"]
+        direction LR
+        Web["💻 Web Admin Dashboard<br/>(React + Tailwind)"]:::frontend
+        
+        subgraph EcosistemaMovil ["Terminal Móvil"]
+            App["📱 App Cobrador<br/>(Flutter + Riverpod)"]:::mobile
+            Isolates["Dart Isolates<br/>(I/O No Bloqueante)"]:::mobile
+            SQLite[("Base de Datos Local<br/>(Drift SQLite)")]:::localdb
+            
+            App <--> Isolates
+            Isolates <--> SQLite
         end
-
-        subgraph MobileApp["App Móvil Cobrador"]
-            MobileUI["UI Móvil a 60 FPS<br/><b>Flutter (UI Thread)</b>"]
-            Isolates["Dart Isolates (Background)<br/><b>Lectura SQLite & Sync Sin Bloqueo</b>"]
-            MagicActivation["Activación vía Magic Link<br/><b>Configuración de Credenciales</b>"]
-
-            MobileUI <--> Isolates
-            MagicActivation --> MobileUI
-        end
     end
 
-    %% ─────────────────────────────────────────────────────────────
-    %% CAPA DE RED / APIS
-    %% ─────────────────────────────────────────────────────────────
-    ActionTrigger == "POST /api/workers/invite<br/>(HTTPS / Non-blocking)" ==> AsyncAPI
-    MagicActivation == "POST /api/workers/activate<br/>(One-Time Crypto Token)" ==> AsyncAPI
+    %% 2. CAPA DE SEGURIDAD
+    Gateway{"🛡️ API Gateway & Auth<br/>(Verificación JWT / Zero-Trust)"}:::gateway
 
-    %% ─────────────────────────────────────────────────────────────
-    %% CAPA BACKEND & COLAS DE TAREAS
-    %% ─────────────────────────────────────────────────────────────
-    subgraph Backend["Capa de Backend Asíncrono (FastAPI + Docker)"]
+    %% 3. CAPA DE BACKEND (ASÍNCRONA)
+    subgraph CapaBackend ["Servicios Cloud Dockerizados (Event-Driven)"]
         direction TB
-
-        AsyncAPI["Servidor API No Bloqueante<br/><b>FastAPI (Async Loop / uvloop)</b>"]
-        WorkerManager["Background Worker / Gestor de Tokens<br/><b>Generación Criptográfica & Colas</b>"]
-        AsyncPool["Pool Asíncrono de Conexiones<br/><b>Asyncpg Connection Pool</b>"]
-
-        AsyncAPI <--> WorkerManager
-        AsyncAPI <--> AsyncPool
+        FastAPI["⚡ Servidor API Principal<br/>(Python FastAPI - Async/Await)"]:::api
+        Workers["⚙️ Colas de Tareas Asíncronas<br/>(Procesamiento en 2do Plano)"]:::worker
+        
+        FastAPI -- "1. Delega tareas pesadas<br/>(Ej: Generar Magic Links, Sync Offline)" --> Workers
     end
 
-    %% ─────────────────────────────────────────────────────────────
-    %% CAPA DE PERSISTENCIA
-    %% ─────────────────────────────────────────────────────────────
-    subgraph Storage["Capa de Persistencia"]
-        direction TB
-        CentralDB[("Base de Datos Central<br/><b>PostgreSQL (Cloud SaaS)</b>")]
-        LocalDB[("Base de Datos Local Offline<br/><b>Drift / SQLite</b>")]
+    %% 4. CAPA DE PERSISTENCIA
+    subgraph CapaDatos ["Capa de Persistencia"]
+        direction LR
+        Postgres[("🐘 Base de Datos Central<br/>(PostgreSQL Cloud)")]:::db
     end
 
-    AsyncPool <== "I/O Concurrente en Milisegundos" ==> CentralDB
-    Isolates <--> LocalDB
-
-    %% ─────────────────────────────────────────────────────────────
-    %% ESTILOS VISUALES (CLASSDEF)
-    %% ─────────────────────────────────────────────────────────────
-    classDef webStyle fill:#0F172A,stroke:#38BDF8,stroke-width:2px,color:#F8FAFC
-    classDef mobileStyle fill:#064E3B,stroke:#10B981,stroke-width:2px,color:#ECFDF5
-    classDef apiStyle fill:#1E1B4B,stroke:#818CF8,stroke-width:2px,color:#EEF2FF
-    classDef workerStyle fill:#431407,stroke:#FB923C,stroke-width:2px,color:#FFF7ED
-    classDef dbStyle fill:#18181B,stroke:#F59E0B,stroke-width:2px,color:#FEF3C7
-    classDef containerGroup fill:#0B131B,stroke:#334155,stroke-width:1.5px,color:#94A3B8
-
-    class AdminUI,ActionTrigger webStyle
-    class MobileUI,Isolates,MagicActivation mobileStyle
-    class AsyncAPI,AsyncPool apiStyle
-    class WorkerManager workerStyle
-    class CentralDB,LocalDB dbStyle
-    class Frontend,Backend,Storage,WebAdmin,MobileApp containerGroup
+    %% CONEXIONES DE RED
+    Web -- "Peticiones Admin" --> Gateway
+    App -- "Background Sync / Autenticación" --> Gateway
+    Gateway -- "Tráfico Autorizado" --> FastAPI
+    
+    FastAPI -- "2. Pool de Conexiones<br/>(Asyncpg)" --> Postgres
+    Workers -. "3. Provisiona cuentas / Actualiza saldos" .-> Postgres
 ```
+
+</div>
 
 ---
 
