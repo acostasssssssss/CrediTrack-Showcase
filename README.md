@@ -2,7 +2,6 @@
 
 <div align="center">
   <img src="assets/mockups/inicio.png" width="65%" alt="Dashboard Web" />
-  <img src="assets/mockups/off-line.jpg" width="30%" alt="App Móvil Offline" />
 </div>
 
 <br />
@@ -18,33 +17,32 @@
 El panel de administración para propietarios y auditores fue concebido bajo una arquitectura moderna **Mobile-First** con un sistema de diseño estructurado en **Bento Grid**. Esta disposición garantiza alta densidad de información financiera en tiempo real, adaptabilidad responsiva absoluta y dashboards analíticos claros sin saturación visual.
 
 ### Métricas y Reportes
-Permite el monitoreo dinámico del flujo de caja, balance de préstamos activos, mora histórica, gastos consolidados del día y proyecciones de recaudación con filtros multidimensionales por ruta o cobrador.
 
 <div align="center">
   <img src="assets/mockups/Reportes.png" width="49%" alt="Métricas" />
   <img src="assets/mockups/reportes2.png" width="49%" alt="Analítica Detallada" />
 </div>
 
-### Gestión de Cartera y Rutas
-Módulo centralizado para el alta de prestatarios, asignación y auditoría de rutas de cobro, calificación de riesgo, seguimiento de microcréditos activos y visualización del recaudo esperado para la jornada.
+### Vista de Clientes y Auditoría
+Módulo central del administrador para consultar el listado global de prestatarios asignados a cada ruta y auditar en profundidad el historial de crédito detallado, cuotas saldadas y estado de la deuda de cada cliente.
 
 <div align="center">
   <img src="assets/mockups/clientes.png" width="49%" alt="Lista de Clientes" />
-  <img src="assets/mockups/cobros_de _hoy.png" width="49%" alt="Cobros de Hoy" />
+  <img src="assets/mockups/cliente_cartulina.png" width="49%" alt="Detalle de Cliente (Vista Admin)" />
 </div>
 
-### Detalle de Cliente (Vista Administrador)
-Vista de control interno financiero diseñada para auditar exhaustivamente el historial de pagos, balance de cuotas pendientes, días sin abono y el estado general de la deuda de un prestatario en específico.
+### Monitoreo de Cobros (Cobros de Hoy)
+Esta sección permite hacer seguimiento y control en tiempo real del dinero recaudado por los cobradores en sus rutas diarias, verificando abonos procesados, pendientes y cierres de jornada.
 
 <div align="center">
-  <img src="assets/mockups/cliente_cartulina.png" width="80%" alt="Detalle de Cliente Vista Administrador" />
+  <img src="assets/mockups/cobros_de_hoy.png" width="80%" alt="Cobros de Hoy" />
 </div>
 
 ### Recibo Digital Público (B2B2C)
-Comprobante digital interactivo accesible mediante enlaces tokenizados seguros (*Magic Links*) que se despachan automáticamente al cliente final por WhatsApp. Permite consultar el estado de cuenta actualizado de forma transparente sin requerir credenciales de acceso.
+Comprobante digital interactivo accesible mediante enlaces tokenizados seguros (*Magic Links*) enviados al cliente por WhatsApp. Permite a los usuarios consultar su saldo y cuotas en tiempo real con cifrado TLS y de solo lectura.
 
 <div align="center">
-  <img src="assets/mockups/recibo_digital.jpg" width="40%" alt="Recibo Digital Público" />
+  <img src="assets/mockups/recibo_digital.jpg" width="40%" alt="Recibo Público" />
 </div>
 
 ### Configuración de Negocio
@@ -64,8 +62,8 @@ Herramienta nativa para operadores en terreno diseñada con una arquitectura de 
 La aplicación implementa microinteracciones fluidas a 60 FPS, navegación háptica con barra flotante desacoplada y estética *Glassmorphism* con desenfoque de fondo en tiempo real para optimizar la ergonomía y velocidad de captura en calle.
 
 <div align="center">
-  <video src="assets/videos/inico.mp4" width="35%" controls autoplay loop muted></video>
-  <video src="assets/videos/general.mp4" width="35%" controls autoplay loop muted></video>
+  <video src="assets/videos/inico.mp4" width="35%" autoplay loop muted playsinline></video>
+  <video src="assets/videos/general.mp4" width="35%" autoplay loop muted playsinline></video>
 </div>
 
 ### Operación en Terreno (Offline)
