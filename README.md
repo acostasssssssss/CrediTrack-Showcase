@@ -62,8 +62,9 @@ Herramienta nativa para operadores en terreno diseñada con una arquitectura de 
 La aplicación implementa microinteracciones fluidas a 60 FPS, navegación háptica con barra flotante desacoplada y estética *Glassmorphism* con desenfoque de fondo en tiempo real para optimizar la ergonomía y velocidad de captura en calle.
 
 <div align="center">
+   <video src="https://github.com/user-attachments/assets/3c3ac7a6-ef47-4bf4-8bee-ab4c1f27ec6a" width="35%" autoplay loop muted playsinline></video>
   <video src="https://github.com/user-attachments/assets/14a5ed49-4b3c-4a36-b0f0-804b4ee5fe19" width="35%" autoplay loop muted playsinline></video>
-  <video src="https://github.com/user-attachments/assets/3c3ac7a6-ef47-4bf4-8bee-ab4c1f27ec6a" width="35%" autoplay loop muted playsinline></video>
+ 
 </div>
 
 ### Operación en Terreno (Offline)
