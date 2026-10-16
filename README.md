@@ -63,8 +63,16 @@ La aplicación implementa microinteracciones fluidas a 60 FPS, navegación hápt
 
 <div align="center">
 
-  <video src="/assets/videos/general.mp4" width="35%" autoplay loop muted playsinline></video>
-  <video src="/assets/videos/inico.mp4" width="35%" autoplay loop muted playsinline></video>
+  <video src="
+
+https://github.com/user-attachments/assets/0f3bc2c9-ea8a-4d10-962b-50deb2fd6273
+
+" width="35%" autoplay loop muted playsinline></video>
+  <video src="
+
+https://github.com/user-attachments/assets/6cb05d95-e123-4f5c-83e2-4a8399708ae5
+
+" width="35%" autoplay loop muted playsinline></video>
 
 </div>
 
